@@ -154,44 +154,39 @@ impl PartialEq<(&str, &str, &str)> for SplittedString<'_> {
 }
 
 /// Convert preceding and trailing quotation marks(', ") into their curved form(‘, ’, “, ”) aka Smart Quote.
-pub(crate) fn smart_quoter(mut splitted: SplittedString) -> SplittedString {
+pub(crate) fn smart_quoter(splitted: SplittedString) -> SplittedString {
     // If the middle part is empty, there is no need to convert.
     if splitted.word().is_empty() {
         return splitted;
     }
 
     // Convert preceding quotation mark(', ") into its curved form(‘, “).
-    let mut preceding = String::with_capacity(splitted.preceding().len() + 3);
-    for ch in splitted.preceding().chars() {
-        match ch {
-            '\'' => {
-                preceding.push('‘');
-            }
-            '"' => {
-                preceding.push('“');
-            }
-            _ => preceding.push(ch),
-        }
-    }
+    let preceding: String = splitted
+        .preceding
+        .chars()
+        .map(|ch| match ch {
+            '\'' => '‘',
+            '"' => '“',
+            _ => ch,
+        })
+        .collect();
 
     // Convert trailing quotation mark(', ") into its curved form(’, ”).
-    let mut trailing = String::with_capacity(splitted.trailing().len() + 3);
-    for ch in splitted.trailing.chars() {
-        match ch {
-            '\'' => {
-                trailing.push('’');
-            }
-            '"' => {
-                trailing.push('”');
-            }
-            _ => trailing.push(ch),
-        }
+    let trailing: String = splitted
+        .trailing
+        .chars()
+        .map(|ch| match ch {
+            '\'' => '’',
+            '"' => '”',
+            _ => ch,
+        })
+        .collect();
+
+    SplittedString {
+        preceding: preceding.into(),
+        word: splitted.word,
+        trailing: trailing.into(),
     }
-
-    splitted.preceding = Cow::Owned(preceding);
-    splitted.trailing = Cow::Owned(trailing);
-
-    splitted
 }
 
 #[cfg(test)]
@@ -250,47 +245,47 @@ mod test {
     fn test_smart_quoting() {
         assert_eq!(
             smart_quoter(SplittedString::split("\"", true)),
-            ("\"".into(), "", "".into())
+            ("\"", "", "")
         );
 
         assert_eq!(
             smart_quoter(SplittedString::split("'Till", true)),
-            ("‘".into(), "Till", "".into())
+            ("‘", "Till", "")
         );
         assert_eq!(
             smart_quoter(SplittedString::split("\"Hey", true)),
-            ("“".into(), "Hey", "".into())
+            ("“", "Hey", "")
         );
         assert_eq!(
             smart_quoter(SplittedString::split("'\"Hey", true)),
-            ("‘“".into(), "Hey", "".into())
+            ("‘“", "Hey", "")
         );
 
         assert_eq!(
             smart_quoter(SplittedString::split("finished'", true)),
-            ("".into(), "finished", "’".into())
+            ("", "finished", "’")
         );
         assert_eq!(
             smart_quoter(SplittedString::split("Hey\"", true)),
-            ("".into(), "Hey", "”".into())
+            ("", "Hey", "”")
         );
         assert_eq!(
             smart_quoter(SplittedString::split("Hey'\"", true)),
-            ("".into(), "Hey", "’”".into())
+            ("", "Hey", "’”")
         );
 
         assert_eq!(
             smart_quoter(SplittedString::split("'Awkward'", true)),
-            ("‘".into(), "Awkward", "’".into())
+            ("‘", "Awkward", "’")
         );
         assert_eq!(
             smart_quoter(SplittedString::split("\"Nevertheless\"", true)),
-            ("“".into(), "Nevertheless", "”".into())
+            ("“", "Nevertheless", "”")
         );
 
         assert_eq!(
             smart_quoter(SplittedString::split("\"'Quotation'\"", true)),
-            ("“‘".into(), "Quotation", "’”".into())
+            ("“‘", "Quotation", "’”")
         );
     }
 }
