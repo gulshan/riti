@@ -27,3 +27,4 @@ poriborton = "0.2"
 
 [dev-dependencies]
 rustversion = "1.0"
+easybench = "1.1"

@@ -257,4 +257,22 @@ mod test {
 
         assert_eq!(smart_quoter(SplittedString::split("\"'Quotation'\"", true)), ("“‘".into(), "Quotation", "’”".into()));
     }
+
+    use easybench::bench;
+    #[test]
+    fn bench_query() {
+        let stats = bench(|| {
+            smart_quoter(SplittedString::split("\"", true));
+            smart_quoter(SplittedString::split("'Till", true));
+            smart_quoter(SplittedString::split("\"Hey", true));
+            smart_quoter(SplittedString::split("'\"Hey", true));
+            smart_quoter(SplittedString::split("finished'", true));
+            smart_quoter(SplittedString::split("Hey\"", true));
+            smart_quoter(SplittedString::split("Hey'\"", true));
+            smart_quoter(SplittedString::split("'Awkward'", true));
+            smart_quoter(SplittedString::split("\"Nevertheless\"", true));
+            smart_quoter(SplittedString::split("\"'Quotation'\"", true));
+        });
+        println!("smart_quoter benchmark: {}", stats);
+    }
 }
