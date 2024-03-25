@@ -242,19 +242,19 @@ mod test {
 
     #[test]
     fn test_smart_quoting() {
-        assert_eq!(smart_quoter(SplittedString::split("\"", true)), ("\"".into(), "", "".into()));
+        assert_eq!(smart_quoter(SplittedString::split("\"", true)), ("\"", "", ""));
 
-        assert_eq!(smart_quoter(SplittedString::split("'Till", true)), ("‘".into(), "Till", "".into()));
-        assert_eq!(smart_quoter(SplittedString::split("\"Hey", true)), ("“".into(), "Hey", "".into()));
-        assert_eq!(smart_quoter(SplittedString::split("'\"Hey", true)), ("‘“".into(), "Hey", "".into()));
+        assert_eq!(smart_quoter(SplittedString::split("'Till", true)), ("‘", "Till", ""));
+        assert_eq!(smart_quoter(SplittedString::split("\"Hey", true)), ("“", "Hey", ""));
+        assert_eq!(smart_quoter(SplittedString::split("'\"Hey", true)), ("‘“", "Hey", ""));
 
-        assert_eq!(smart_quoter(SplittedString::split("finished'", true)), ("".into(), "finished", "’".into()));
-        assert_eq!(smart_quoter(SplittedString::split("Hey\"", true)), ("".into(), "Hey", "”".into()));
-        assert_eq!(smart_quoter(SplittedString::split("Hey'\"", true)), ("".into(), "Hey", "’”".into()));
+        assert_eq!(smart_quoter(SplittedString::split("finished'", true)), ("", "finished", "’"));
+        assert_eq!(smart_quoter(SplittedString::split("Hey\"", true)), ("", "Hey", "”"));
+        assert_eq!(smart_quoter(SplittedString::split("Hey'\"", true)), ("", "Hey", "’”"));
 
-        assert_eq!(smart_quoter(SplittedString::split("'Awkward'", true)), ("‘".into(), "Awkward", "’".into()));
-        assert_eq!(smart_quoter(SplittedString::split("\"Nevertheless\"", true)), ("“".into(), "Nevertheless", "”".into()));
+        assert_eq!(smart_quoter(SplittedString::split("'Awkward'", true)), ("‘", "Awkward", "’"));
+        assert_eq!(smart_quoter(SplittedString::split("\"Nevertheless\"", true)), ("“", "Nevertheless", "”"));
 
-        assert_eq!(smart_quoter(SplittedString::split("\"'Quotation'\"", true)), ("“‘".into(), "Quotation", "’”".into()));
+        assert_eq!(smart_quoter(SplittedString::split("\"'Quotation'\"", true)), ("“‘", "Quotation", "’”"));
     }
 }
