@@ -250,47 +250,47 @@ mod test {
     fn test_smart_quoting() {
         assert_eq!(
             smart_quoter(SplittedString::split("\"", true)),
-            ("\"".into(), "", "".into())
+            ("\"", "", "")
         );
 
         assert_eq!(
             smart_quoter(SplittedString::split("'Till", true)),
-            ("‘".into(), "Till", "".into())
+            ("‘", "Till", "")
         );
         assert_eq!(
             smart_quoter(SplittedString::split("\"Hey", true)),
-            ("“".into(), "Hey", "".into())
+            ("“", "Hey", "")
         );
         assert_eq!(
             smart_quoter(SplittedString::split("'\"Hey", true)),
-            ("‘“".into(), "Hey", "".into())
+            ("‘“", "Hey", "")
         );
 
         assert_eq!(
             smart_quoter(SplittedString::split("finished'", true)),
-            ("".into(), "finished", "’".into())
+            ("", "finished", "’")
         );
         assert_eq!(
             smart_quoter(SplittedString::split("Hey\"", true)),
-            ("".into(), "Hey", "”".into())
+            ("", "Hey", "”")
         );
         assert_eq!(
             smart_quoter(SplittedString::split("Hey'\"", true)),
-            ("".into(), "Hey", "’”".into())
+            ("", "Hey", "’”")
         );
 
         assert_eq!(
             smart_quoter(SplittedString::split("'Awkward'", true)),
-            ("‘".into(), "Awkward", "’".into())
+            ("‘", "Awkward", "’")
         );
         assert_eq!(
             smart_quoter(SplittedString::split("\"Nevertheless\"", true)),
-            ("“".into(), "Nevertheless", "”".into())
+            ("“", "Nevertheless", "”")
         );
 
         assert_eq!(
             smart_quoter(SplittedString::split("\"'Quotation'\"", true)),
-            ("“‘".into(), "Quotation", "’”".into())
+            ("“‘", "Quotation", "’”")
         );
     }
 }
